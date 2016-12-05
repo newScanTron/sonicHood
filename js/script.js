@@ -4,13 +4,13 @@ function linkHover(ele) {
     var name = ele.id;
     switch (name) {
         case 'rotgut':
-            document.getElementById('sonic').innerHTML = "Rotgut Whines is a Soul and roll band from missoula, Mt.";
+            document.getElementById('sonic').style.display = "none";
             break;
         case 'windbag':
-            document.getElementById('sonic').innerHTML = "Windbag Saloon in helena, Mt.";
+            document.getElementById('sonic').innerHTML = "block";
             break;
         case 'synth':
-            document.getElementById('sonic').innerHTML = "SynthScape is a endless runner style game for two players, written in typescript using the <a href='http://phaser.io/'>Phaser.io</a> framwork";
+            document.getElementById('sonic').innerHTML = "";
             break;
     }
 }
