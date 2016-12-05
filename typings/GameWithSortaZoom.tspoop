@@ -1,0 +1,612 @@
+/// <reference path="../tsDefinitions/phaser.d.ts" />
+
+var game: Phaser.Game;
+var deltaTime: number;
+var animationSpeed:number = 5;
+var gravity:number = 550;
+var runSpeed:number = 425;
+var shootSpeed: number = runSpeed * 2;
+var shootAngleMultiply: number = 2.5;
+var shootTime: number = 1000;
+var jumpSpeed: number = 450;
+var topSpeed: number = 600;
+var player1Score: number = 0;
+var player2Score: number = 0;
+//some time stamp stuff for shooting and making the zoom not go crazy when we are near the middle section
+var player1ShootTime: number = 0;
+var player2ShootTime: number = 0;
+var zoomTimeStamp : number = 0;
+var canJump: number = 1;
+var canJump2: number = 1;
+var oneGrounded : boolean = true;
+var twoGrounded : boolean = true;
+var firstTime: boolean = true;
+var startX: number = 620;
+var startXplay2: number = 1.5;
+var startY: number = 620;
+var platforms: Phaser.Group;
+var staticGround: Phaser.Sprite;
+var clouds: Phaser.Group;
+var stars: Phaser.Group;
+var balls: Phaser.Group;
+var explodes: Phaser.Group;
+var player1: Phaser.Sprite;
+var player2: Phaser.Sprite;
+var cyclopse: Phaser.Sprite;
+var cursors: Phaser.CursorKeys;
+var loop: Phaser.Sprite;
+
+enum playerType { one = 1, two = 2 }
+
+function makeGround() {
+   var ground = platforms.create(0, game.world.height - 64, 'ground1');
+   ground.scale.setTo(2, 2);
+   ground = platforms.create(900, game.world.height - 64, 'ground');
+   staticGround = game.add.sprite(0, game.world.height - 120, 'ground2');
+   staticGround.scale.set(4, 1);
+
+   game.physics.arcade.enable(staticGround);
+   staticGround.body.friction = new Phaser.Point(0,0);
+   staticGround.body.immovable = true;
+
+   ground.scale.setTo(2, 2);
+   var ledge = platforms.create(400, game.world.height - 400, 'ground1');
+   ledge.checkWorldBounds = true;
+   ledge = platforms.create(-150, game.world.height - 250, 'ground');
+   ledge = platforms.create(600, game.world.height - 400, 'ground1');
+   ledge = platforms.create(-150, game.world.height - 250, 'ground');
+   ledge.checkWorldBounds = true;
+   ledge.events.onOutOfBounds.add(resetSprite, this);
+
+   for (var i = 0; i < 45; i++)
+   {
+      var randomnumber = Math.random();
+      if (i%2 == 0)
+      {
+         ledge = platforms.create(600 * (i / 2), game.world.height * randomnumber, 'ground1');
+      }
+      else
+         ledge = platforms.create(600 * (i / 2), game.world.height * randomnumber, 'ground2');
+      ledge.checkWorldBounds = true;
+      ledge.events.onOutOfBounds.add(resetSprite, this);
+   }
+   platforms.setAll('body.friction', new Phaser.Point(0, 0));
+   platforms.setAll('body.immovable', true);
+
+}
+//function to create the clouds and other background sprites to create the parallax
+//scolling background effect. swirl1.jpg');
+   //						 'assets/glass.png
+function makeClouds() {
+   // var ground = clouds.create(0, game.world.height - 64, 'back');
+   // ground.scale.setTo(2, 2);
+   // ground = clouds.create(900, game.world.height - 64, 'loop');
+   // ground.scale.setTo(2, 2);
+   var ledge = clouds.create(400,  300, 'cloud1');
+   ledge.checkWorldBounds = true;
+   ledge = clouds.create(-150, game.world.height - 150, 'cloud1');
+   ledge.checkWorldBounds = true;
+   ledge = clouds.create(-150, game.world.height - 230, 'star1');
+   ledge.checkWorldBounds = true;
+   ledge.events.onOutOfBounds.add(resetSprite, this);
+
+   for (var i = 0; i < 60; i++) {
+      var randomnumber = Math.random();
+      var halfX = game.world.width;
+      ledge = clouds.create(halfX * Math.random(), game.world.height * randomnumber , 'cloud1');
+      ledge.checkWorldBounds = true;
+      ledge.events.onOutOfBounds.add(resetSprite, this);
+      // ledge = clouds.create(halfX * Math.random(), game.world.height * randomnumber, 'star2');
+      // ledge.checkWorldBounds = true;
+      // ledge.events.onOutOfBounds.add(resetSprite, this);
+    }
+      clouds.setAll('body.friction', new Phaser.Point(0, 0));
+      clouds.setAll('body.immovable', true);
+}
+
+function addPlayer() {
+
+   player1 = game.add.sprite(startX, startY, 'dude1');
+   game.physics.arcade.enable(player1);
+   player1.body.bounce.y = 0.75;
+   player1.body.gravity.y = 500;
+   player1.body.mass = 100;
+   player1.animations.add('right', [0, 1, 2, 3, 5, 6], animationSpeed, true);
+   if (firstTime == false)
+   {
+      player1.animations.play('right');
+   }
+}
+
+function addPlayer2() {
+   player2 = game.add.sprite(startX * startXplay2, startY, 'dude2');
+   game.physics.arcade.enable(player2);
+   player2.body.bounce.y = 0.75;
+   player2.body.gravity.y = 500;
+   player2.body.mass = 100;
+   player2.animations.add('right', [0, 1, 2, 3, 5, 6], animationSpeed, true);
+   if (firstTime == false)
+   {
+      player2.animations.play('right');
+   }
+}
+
+function addCyclopse(x:number, y:number, speed:number) {
+   cyclopse = game.add.sprite(x , y - 64, 'cyclopse');
+   game.physics.arcade.enable(cyclopse);
+   cyclopse.animations.add('talk', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21], 12, true);
+   cyclopse.animations.play('talk');
+   cyclopse.body.velocity.x = speed;
+   cyclopse.checkWorldBounds = true;
+   cyclopse.events.onOutOfBounds.add(resetSprite, this);
+
+}
+
+//add the lazer for player one
+function addLazerOne(slayer: Phaser.Sprite) {
+
+      if (game.time.now > player1ShootTime)
+      {
+         var star = stars.create(slayer.position.x + 64, slayer.position.y, 'star');
+         star.body.gravity.y = 5;
+         star.body.bounce.y = 0.5;
+         star.body.mass = 0.1;
+         star.checkWorldBounds = true;
+         star.body.velocity.x = shootSpeed;
+         star.body.velocity.y = slayer.body.velocity.y * shootAngleMultiply;
+         star.events.onOutOfBounds.add(resetSprite, this);
+         player1ShootTime = game.time.now + shootTime;
+      }
+}
+        //this is not adding a star so much as a lazer
+function addStar2(slayer: Phaser.Sprite) {
+     if (game.time.now > player2ShootTime)
+    {
+   var star = balls.create(slayer.position.x - 32, slayer.position.y, 'fireBall');
+
+   star.body.gravity.y = 5;
+   //  This just gives each star a slightly random bounce value
+   star.body.bounce.y = 0.5;
+   star.body.mass = 0.1;
+   star.checkWorldBounds = true;
+   star.body.velocity.x = -shootSpeed - runSpeed;
+   star.body.velocity.y = slayer.body.velocity.y * shootAngleMultiply;
+   star.events.onOutOfBounds.add(resetSprite, this);
+
+   // balls.setAll('outOfBoundsKill', true);
+   // stars.setAll('outOfBoundsKill', true);
+   player2ShootTime = game.time.now + shootTime;
+
+    }
+}
+function setupInvader (invader) {
+
+    invader.anchor.x = 0.5;
+    invader.anchor.y = 0.5;
+    invader.animations.add('kaboom');
+
+}
+function setupCloud (invader) {
+
+  invader.body.velocity.x = -runSpeed/(2 * Math.random() + 3);
+
+}
+function startBiatch() {
+         platforms.setAll('body.velocity.x', -runSpeed);
+         clouds.forEach(setupCloud, this);
+         player2.animations.play('right');
+         player1.animations.play('right');
+}
+//this function "randomly" repositions the land elements and sends then moving to the left to create an endless runner effect
+function reLedge() {
+   var i = 1;
+   var width = game.world.width;
+   var height = game.world.width;
+   while (platforms.countDead() > 0)
+   {
+      var ledge = platforms.getFirstDead();
+      if (ledge != null)
+      {
+         var randomnumber = Math.floor(Math.random() * i)
+         var randomX = Math.floor(Math.random() * width) + (width/1.5);
+         var randomY = Math.floor(Math.random() * height/i);
+         ledge.reset(randomX, randomY);
+         ledge.body.velocity.x = -runSpeed;
+      }
+      i++;
+   }
+
+}
+function reCloud() {
+    var ledge = clouds.getFirstDead();
+    if (ledge != null) {
+        var randomnumber = Math.random();
+        var diff = 1 - randomnumber;
+      var halfX = game.world.width;
+        ledge.reset( halfX * diff, game.world.height * randomnumber);
+        ledge.body.velocity.x = -runSpeed / (2* Math.random() + 3);
+    }
+}
+//only have this a seperate funciton incase it later requres more than just killing the ledge.
+function resetSprite(ledge: Phaser.Sprite) {
+      ledge.kill();
+}
+
+//these two functions reset the players when they fall off the screen
+function resetPlayerX() {
+   if (player1.body.position.x < startX - 5)
+   {
+      player1.body.velocity.x = runSpeed/2;
+   }
+   if (player1.body.position.x > startX + 5)
+   {
+      player1.body.velocity.x = -runSpeed/2;
+   }
+   else if (player1.body.position.x == startX)
+   {
+      player1.body.velocity.x = 0;
+   }
+}
+function resetPlayer2X() {
+   if (player2.body.position.x < (startX * startXplay2) - 5)
+   {
+      player2.body.velocity.x = runSpeed/2;
+   }
+   if (player2.body.position.x > (startX * startXplay2) + 5)
+   {
+      player2.body.velocity.x = -runSpeed/2;
+   }
+   else if (player2.body.position.x == (startX * startXplay2))
+   {
+      player2.body.velocity.x = 0;
+   }
+}
+//function to destroy and set explosion when the two lazers hit eachother
+function ballStarCollide(ball: Phaser.Sprite, star: Phaser.Sprite)
+{
+   ball.kill();
+   star.kill();
+
+   var explosion = explodes.getFirstExists(false);
+    explosion.reset(ball.body.x, ball.body.y);
+    explosion.play('kaboom', 30, false);
+    explosion.body.velocity.x = - runSpeed;
+
+}
+
+//will do stuff for going between full and small screen
+function gofull() {
+
+    if (game.scale.isFullScreen)
+    {
+       // game.scale.stopFullScreen();
+
+    }
+    else
+    {
+        game.scale.startFullScreen(false);
+        startBiatch();
+    }
+}
+class SimpleGame {
+
+      pad: Phaser.SinglePad;
+      leftTrigger: Phaser.GamepadButton;
+      rightTrigger: Phaser.GamepadButton;
+      leftBummper: Phaser.GamepadButton;
+      rightBummper: Phaser.GamepadButton;
+
+   constructor()
+   {
+
+      game = new Phaser.Game( 1000, 600, Phaser.AUTO, 'content',
+      { preload:this.preload,
+         create:this.create,
+         update: this.update,
+         render: this.render,
+         onLeftTrigger: this.onLeftTrigger,
+         onRightTrigger: this.onRightTrigger,
+         addButtons: this.addButtons,} );
+
+   }
+
+   preload()
+   {
+      game.load.image( 'logo', "assets/logo.png" );
+      game.stage.backgroundColor = 0x5660e9;
+      game.load.image('sky', 'assets/sky.png');
+      game.load.image('ground', 'assets/platform.png');
+      game.load.image('ground1', 'assets/SynthScapeGround.png');
+      game.load.image('ground2', 'assets/SynthScapeGround1.png');
+      game.load.image('star', 'assets/purpleLazer.png');
+      game.load.image('back', 'assets/swirl1.jpg');
+      game.load.image('loop', 'assets/glass.png');
+      game.load.image('fireBall', 'assets/lazer.png');
+      game.load.image('cloud1', 'assets/cloud1.png');
+      game.load.image('star1', 'assets/star1.png');
+      game.load.spritesheet('dude1', 'assets/synthBot1.png', 32, 32);
+      game.load.spritesheet('dude2', 'assets/synthBot2.png', 32, 32);
+      game.load.spritesheet('kaboom', 'assets/explosion.png', 64, 64);
+      game.load.spritesheet('cyclopse', 'assets/cyclopse_talking12fps.png', 64, 64);
+
+   }
+
+   render() {
+      //game.debug.inputInfo(16, 16);
+      //game.debug.body(this.player);
+      //game.debug.bodyInfo(this.player, 16, 16);
+      var numberLive = balls.countLiving();
+      var numberDead = stars.countLiving();
+      game.debug.text("player one: " + player1Score + " player two: " + player2Score, 16, 16)
+      game.debug.text("balls: " + numberLive + " stars: " + numberDead, 16, 32)
+
+   }
+
+   create() {
+      game.physics.startSystem(Phaser.Physics.ARCADE);
+      game.world.setBounds(0, 0, 6000, 2000);
+      game.input.gamepad.start();
+      this.pad = game.input.gamepad.pad1;
+      this.pad.addCallbacks(this, { onConnect: this.addButtons });
+
+      game.input.onDown.add(gofull, this);
+      game.input.addPointer();
+      game.input.addPointer();
+      game.input.addPointer();
+//check for mobile then set screen to fullScreenScaleMode.
+      if (!game.device.desktop){ game.input.onDown.add(gofull, this); }
+      game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+
+//add all the gorups and set to enableBody = true;
+      stars = game.add.group();
+      stars.enableBody = true;
+      balls = game.add.group();
+      balls.enableBody = true;
+      clouds = game.add.group();
+      clouds.enableBody = true;
+      platforms = game.add.group();
+      platforms.enableBody = true;
+//run the functions to do all the intial setup.
+      makeGround();
+      makeClouds();
+      addPlayer();
+      addPlayer2();
+
+      firstTime = false;
+      //this.addButtons();
+      cursors = game.input.keyboard.createCursorKeys();
+      explodes = game.add.group();
+      explodes.enableBody = true;
+      explodes.createMultiple(15, 'kaboom');
+      explodes.forEach(setupInvader, this);
+
+      console.log("game ehintg: " + game.world.height);
+      game.camera.bounds = null;
+
+   }
+
+   addButtons() {
+      this.leftTrigger = this.pad.getButton(Phaser.Gamepad.XBOX360_LEFT_TRIGGER);
+      this.rightTrigger = this.pad.getButton(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER);
+      this.leftTrigger.onDown.add(this.onLeftTrigger);
+      this.leftTrigger.onUp.add(this.onLeftTrigger);
+      this.leftTrigger.onFloat.add(this.onLeftTrigger);
+
+   }
+
+   onLeftTrigger(player: Phaser.Sprite, balls: Phaser.Sprite) {
+      balls.kill();
+      player1Score++;
+      var explosion = explodes.getFirstExists(false);
+      explosion.reset(player.body.x, player.body.y);
+      explosion.play('kaboom', 30, false);
+   }
+
+   onRightTrigger(player: Phaser.Sprite, balls: Phaser.Sprite) {
+      balls.kill();
+      //player.kill();
+      player2Score++;
+      var explosion = explodes.getFirstExists(false);
+      explosion.reset(player.body.x, player.body.y);
+      explosion.play('kaboom', 30, false);
+   }
+
+/*What THis the the
+UPdate and its kinda hard to see*/
+   update() {
+
+      var p1Y = player1.position.y;
+      var p1X = player1.position.x;
+      var p2Y = player2.position.y;
+      var p2X = player2.position.x;
+      var pointer1X = game.input.pointer1.screenX;
+      var pointer1Y = game.input.pointer1.screenY;
+      var pointer2X = game.input.pointer2.screenX;
+      var pointer2Y = game.input.pointer2.screenY;
+      var camHeight = game.camera.height;
+      var camWidth = game.camera.width;
+
+      var zoomTimeOffset : number = 1200;
+      var play1TotsX = p1X + totsDisX;
+      var play1TotsY = p1Y + totsDis;
+      var play2TotsY = p2Y + totsDis;
+//some variables for camera scaling
+      var scaleFactor: number = 0.85;
+      var scaleTime : number = 450;
+      var scaleDiff = camHeight / 5;
+      var totsDis = Math.abs(p2Y - p1Y) / 2;
+      var totsDisX = Math.abs(p2X - p1X) / 2;
+      var totsScaledDis = Math.abs(p2Y*scaleFactor - p1Y*scaleFactor)/2;
+
+//this is required to make all the different objcets collide and bounce off each other.
+      game.physics.arcade.collide(platforms, player1);
+      game.physics.arcade.collide(platforms, player2);
+      game.physics.arcade.collide(platforms, stars);
+      game.physics.arcade.collide(platforms, balls);
+      game.physics.arcade.collide(staticGround, player1);
+      game.physics.arcade.collide(staticGround, player2);
+      game.physics.arcade.collide(staticGround, stars);
+      game.physics.arcade.collide(staticGround, balls);
+//check to see if either player is it by a lazer blast
+      game.physics.arcade.overlap(balls, player1, this.onRightTrigger, null, this);
+      game.physics.arcade.overlap(stars, player2, this.onLeftTrigger, null, this);
+      game.physics.arcade.overlap(balls, stars, ballStarCollide, null, this);
+//if either player reaches top jump velocity we set it to zero.
+      if (player1.body.velocity.y < -topSpeed)
+      {
+         player1.body.velocity.y = 0
+      }
+      if (player2.body.velocity.y < -topSpeed)
+      {
+         player2.body.velocity.y = 0
+      }
+//This stops an odd jittering effect; cause by what, im not sure.
+      player1.body.velocity.x = 0;
+      player2.body.velocity.x = 0;
+//this reLedge() is what does all the work of checking if the ground as reached the end of the screen and weather or not we
+//need to delete it and make a new one.
+      reLedge();
+      reCloud();
+      resetPlayerX();
+      resetPlayer2X();
+
+      if (game.input.keyboard.downDuration(Phaser.Keyboard.R, 5)) {
+         player1.destroy();
+         addPlayer();
+      }
+
+      if (game.input.keyboard.isDown(Phaser.Keyboard.F)) { gofull(); }
+
+//keystroke to fire the lazers for the two players.
+        if (game.input.keyboard.downDuration(Phaser.Keyboard.S, 50)
+             || (game.input.pointer1.isDown
+                && pointer1X <= camWidth / 2
+                && pointer1Y <= camHeight / 2)
+         || (game.input.pointer2.isDown
+                && pointer2X <= camWidth / 2
+                && pointer2Y <= camHeight / 2)) {
+         addLazerOne(player1);
+      }
+        if (game.input.keyboard.downDuration(Phaser.Keyboard.DOWN, 50)
+                || (game.input.pointer1.isDown
+                && pointer1X >= camWidth / 2
+                && pointer1Y <= camHeight/ 2)
+         || (game.input.pointer2.isDown
+                && pointer2X >= camWidth / 2
+                && pointer2Y <= camHeight / 2)) {
+         addStar2(player2);
+      }
+      if ((game.input.keyboard.isDown(Phaser.Keyboard.W)
+         || (game.input.pointer1.isDown
+         && pointer1X <= camWidth / 2
+         && pointer1Y >= camHeight / 2)
+         || (game.input.pointer2.isDown
+         && pointer2X <= camWidth / 2
+         && pointer2Y >= camHeight / 2))
+         && canJump >= 1)
+      {
+         player1.body.velocity.y = -jumpSpeed;
+         canJump--;
+         oneGrounded = false;
+      }
+      if (player1.body.position.y >= game.world.height || player1.body.position.x <= 0) {
+         player1.destroy();
+         addPlayer();
+      }
+      if (player2.body.position.y >= game.world.height || player2.body.position.x <= 0) {
+         player2.destroy();
+         addPlayer2();
+      }
+      if (player1.body.touching.down && !oneGrounded) {
+         canJump++;
+         oneGrounded = true;
+      }
+      if (player2.body.touching.down && !twoGrounded) {
+         canJump2++;
+         twoGrounded = true;
+      }
+
+   //pointer1X <= game.world.width
+      //game.input.pointer1.isDown
+        if ((cursors.up.isDown
+            || (game.input.pointer1.isDown
+                && pointer1X >= camWidth / 2
+                && pointer1Y >= camHeight / 2)
+         || (game.input.pointer2.isDown
+                && pointer2X >= camWidth / 2
+                && pointer2Y >= camHeight / 2))
+            && canJump2 >= 1) {
+         player2.body.velocity.y = -jumpSpeed;
+         canJump2--;
+         twoGrounded = false;
+      }
+      if (cursors.left.isDown) {
+         //  Move to the left
+         //  this.player.body.velocity.x = -350;
+         //platforms.setAll('body.velocity.x', runSpeed);
+         //	stars.setAll('body.velocity.x', runSpeed);
+
+      }
+      else if (cursors.right.isDown) {
+         //  Move to the right
+         // this.player.body.velocity.x = 350;
+            startBiatch();
+         //stars.setAll('body.velocity.x', -runSpeed);
+         //sprites.setAll('body.bounce.y', 1);
+
+      }
+      else {
+         //  Stand still
+         // this.player.animations.stop();
+         //this.platforms.setAll('body.velocity.x', 0);
+         //this.stars.setAll('body.velocity.x', 0);
+         // this.player.frame = 4;
+        }
+
+        if (p1Y >= p2Y) {
+            console.log("player2.y + totsdisY: " + play2TotsY);
+
+            if (totsDis >= scaleDiff && game.time.now > zoomTimeStamp) {
+
+               game.camera.focusOnXY(p1X + totsDisX, (p2Y + totsScaledDis));
+                game.add.tween(game.world.scale).to({
+                  x: scaleFactor, y: scaleFactor
+               }, scaleTime).start();
+
+               zoomTimeStamp = game.time.now + zoomTimeOffset;
+            }
+            else if (game.time.now > zoomTimeStamp){
+               game.camera.focusOnXY(p1X + totsDisX, p2Y + totsDis);
+                game.add.tween(game.world.scale).to({
+                  x: 1, y: 1
+               }, scaleTime).start();
+               zoomTimeStamp = game.time.now + zoomTimeOffset;
+            }
+            zoomTimeStamp = game.time.now + zoomTimeOffset;
+        }
+        else if (p1Y < p2Y) {
+
+           console.log("player1.y + totsdisY: " + play1TotsY);
+           game.camera.focusOnXY(p1X + totsDisX, p1Y + totsScaledDis );
+            if (totsDis >= scaleDiff && game.time.now > zoomTimeStamp) {
+               game.camera.focusOnXY(p1X + totsDisX, p1Y + totsDis);
+                game.add.tween(game.world.scale).to({
+               x: scaleFactor, y: scaleFactor
+            }, scaleTime).start();
+            zoomTimeStamp = game.time.now + zoomTimeOffset;
+            }
+            else if (game.time.now > zoomTimeStamp){
+               game.camera.focusOnXY(p1X + totsDisX, p1Y + totsDis);
+                game.add.tween(game.world.scale).to({
+               x: 1, y: 1
+            }, scaleTime).start();
+            zoomTimeStamp = game.time.now + zoomTimeOffset;
+         }
+      }
+   }
+}
+// when the page has finished loading, create our game
+window.onload = () => {
+   var game = new SimpleGame();
+}

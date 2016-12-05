@@ -1,0 +1,100 @@
+@using System;
+@using D = System.Data;
+@using c = System.Data.SqlClient;
+<!DOCTYPE html>
+<html itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <meta content="Pretty much the coolest website for art made in Montana" name="description">
+    <meta content="noodp" name="robots">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="author" content="Chris Murphy">
+    <title>The Sonic Hood</title>
+    <!--BOOTSTRAP!!-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!--my javascript stuff-->
+    <script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script src="http://www.w3schools.com/lib/w3data.js"></script>
+    <!--my style-->
+    <link href="css/sonicHood.css" rel="stylesheet" />
+    <script>
+
+        function loadDoc() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    document.getElementById("demo").innerHTML = xhttp.responseText;
+                }
+            };
+            xhttp.open("GET", "ajax_info.txt", true);
+            xhttp.send();
+        }
+    </script>
+</head>
+<body>
+    <h1 id="headerOne">The Sonic Neighborhood </h1>
+    <div class="container content" id="mainDiv">
+    <div id="demo">if demo then wrong</div>
+
+        <div itemscope itemtype="http://schema.org/VideoGameSeries">
+
+        @{
+
+                var lookAtMe = "Look AT MEEE!";
+
+                using (var connection = new c.SqlConnection("Data Source=tcp:sonichood.database.windows.net,1433;Initial Catalog=dbo.sonichood;User ID=chrismurphy@sonichood;Password=Tr00p2!4"))
+                {
+                    connection.Open();
+
+
+                    var selectQueryString = "SELECT * FROM Users";
+
+                    using (var command = new c.SqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandType = D.CommandType.Text;
+                        command.CommandText = selectQueryString;
+
+                        c.SqlDataReader reader = command.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            <p>@reader["Username"].ToString()</p>
+                        }
+                    }
+                }
+            }
+
+            <table></table>
+
+            <div class="row" id="navBar">
+                <div id="sideBar" class="col-sm-2">
+                    <h4>A place for things we've made</h4>
+                    <p>@lookAtMe</p>
+                    <div id="sideBarText">
+                        <a href="datamonster.html">DataMoNsTeR</a>
+                        <br>
+                        <a id="fancyChild" title="For Fancy Navigation">FancyChild</a>
+                        <br>
+                        <a href="/about.html">About</a>
+                        <br>
+                        <a href="synthscape.html" title="For Fancy Navigation">Synthscape</a>
+                        <br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+
+    </script>
+</body>
+</html>

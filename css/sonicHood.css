@@ -1,0 +1,84 @@
+body {
+  background-color: lightgray;
+ }
+ 
+h1 {
+
+  padding-top: 2%;
+  padding: 2%;
+}
+
+a {
+  text-decoration:none;
+}
+.selfie {
+  width: 682px / 4;
+  height: 765px / 4; 
+}
+
+.content {
+  background-color:  #333333;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+  color: white;
+}
+
+#headerOne {
+  color: grey;
+  font-size: 40px;
+  font-family: 'Rokkitt', sans-serif;
+}
+#headerOne > span {
+  margin-left:20%;
+  font-weight: 800;
+}
+#titleName {
+  color: grey; 
+}
+
+#sideBar {
+  text-align: left;
+  color: grey; 
+}
+
+#sideBarText {
+  color: grey;
+  opacity: 1;
+  color: red; 
+}
+  
+#sonic {
+  font-size: 20px;
+  padding-top: 60px;
+}
+
+href {
+  color: grey; 
+}
+
+#hide {
+  background-image: url("assets/at-phills.gif");
+  background-color: dimgray;
+  font-size: 18pt;
+  text-align: center;
+  width: 60px;
+  height: 40px; 
+}
+
+#ruleWords {
+  color: grey;
+  font-size: 24;
+  opacity: 1; 
+}
+
+#fancyChild:hover {
+  cursor: pointer; 
+}
+
+.button {
+  color: white; 
+}
+
+/*# sourceMappingURL=sonicHood.css.map */

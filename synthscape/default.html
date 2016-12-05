@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+	<head>
+		<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		<meta content="Pretty much the coolest website for art made in Montana" name="description">
+		<meta content="noodp" name="robots">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="author" content="Chris Murphy">
+		<title>The Sonic Hood</title>
+		<!--BOOTSTRAP!!-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>	
+		<!--my javascript stuff-->
+		<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+
+		<!--my style-->
+		<link href="sonicHood.css" rel="stylesheet" />
+
+	</head>
+<body>
+	
+	<div class="container" id="mainDiv">
+		<div class="row">
+		<h1 id="headerOne">The Sonic Neighborhood </h1>
+		</div>
+		<div  class="row" itemscope itemtype ="http://schema.org/VideoGameSeries">
+			<div class="col-sm-12">
+				
+				<h1 id="gameName" itemprop="name" hidden=true>SynthScape</h1>
+				<div id="content"  >
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.4.6/phaser.min.js"></script>
+					<script src="js/Game.js"></script>
+				</div>
+			</div>	
+		</div>	
+		<div class="row" id="navBar">
+		<div id="sideBar" class="col-sm-2" style="height: 100%;">
+		<h4>A place for things we've made</h4>
+
+		<div id="sideBarText">	
+		<a href="datamonster.html" >DataMoNsTeR</a>
+		</br>
+		<a id="fancyChild" >FancyChild</a>
+		<br>
+		<a href="about.html">About</a>
+
+		</div>
+		
+		</div>
+
+		
+			<div class="col-sm-10" >
+				<div id="ruleWords" class="col-sm-8" style="height: 100%;">
+					Up arrow and down arrow controll the player on the right side of the screen.
+					<p>
+						W and S controll the player on the left side of the screen.
+					</p>
+					click the screen for full screen.
+					<h3> Jump and Shoot and try not to fall.</h3>
+				</div>
+				<div class="col-sm-4">
+					
+				(a work in progress)
+					<div class="row">
+						<button id="hide" class="button">Back</button>
+
+					</div>
+					<div class="row">	
+						<button id="show" class="button">Play</button>
+					</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		
+		</div>
+	
+	</div>
+	<footer>Thanks for playing</footer>
+</body>
+</html>
