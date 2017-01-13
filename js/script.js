@@ -4,13 +4,22 @@ function linkHover(ele) {
     var name = ele.id;
     switch (name) {
         case 'rotgut':
-            document.getElementById('sonic').style.display = "none";
+            document.getElementById('rotgutP').style.display = "block";
+            document.getElementById('sonicP').style.display = "none";
+            document.getElementById('synthscapeP').style.display = "none";
+            document.getElementById('windbagP').style.display = "none";
             break;
         case 'windbag':
-            document.getElementById('sonic').innerHTML = "block";
+            document.getElementById('rotgutP').style.display = "none";
+            document.getElementById('sonicP').style.display = "none";
+            document.getElementById('synthscapeP').style.display = "none";
+            document.getElementById('windbagP').style.display = "block";
             break;
         case 'synth':
-            document.getElementById('sonic').innerHTML = "";
+            document.getElementById('rotgutP').style.display = "none";
+            document.getElementById('sonicP').style.display = "none";
+            document.getElementById('synthscapeP').style.display = "block";
+            document.getElementById('windbagP').style.display = "none";
             break;
     }
 }

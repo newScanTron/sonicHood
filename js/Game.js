@@ -44,7 +44,7 @@ var cyclopse;
 var cursors;
 var loop;
 const worldWidth = 1500;
-const xDivSize = 16 * 2;
+const xDivSize = 16 * 2.5;
 const yDivSize = 80;
 var scaleFactorOg;
 let halfWorld = (worldWidth / xDivSize) / 2;
@@ -109,7 +109,7 @@ function makeCloudsLoop() {
 }
 function makeClouds() {
     var ledge = clouds.create(400, 300, 'cloud1');
-    for (var i = 0; i < 60; i++) {
+    for (var i = 0; i < 20; i++) {
         var randomnumber = Math.random();
         var halfX = game.world.width;
         if (i % 2 == 0)
@@ -462,7 +462,7 @@ class SimpleGame {
         if (game.input.keyboard.isDown(Phaser.Keyboard.T)) {
             toggleCameraBounds();
         }
-        if (game.input.keyboard.downDuration(Phaser.Keyboard.S, 50)
+        if (game.input.keyboard.downDuration(Phaser.Keyboard.D, 50)
             || (game.input.pointer1.isDown
                 && pointer1X <= camWidth / 2
                 && pointer1Y <= camHeight / 2)
@@ -471,7 +471,7 @@ class SimpleGame {
                 && pointer2Y <= camHeight / 2)) {
             addLazerOne(player1);
         }
-        if (game.input.keyboard.downDuration(Phaser.Keyboard.DOWN, 50)
+        if (game.input.keyboard.downDuration(Phaser.Keyboard.LEFT, 50)
             || (game.input.pointer1.isDown
                 && pointer1X >= camWidth / 2
                 && pointer1Y <= camHeight / 2)
@@ -492,6 +492,21 @@ class SimpleGame {
             canJump--;
             oneGrounded = false;
         }
+        if (game.input.keyboard.isDown(Phaser.Keyboard.S)) {
+            player1.body.velocity.y = jumpSpeed;
+        }
+        if ((cursors.up.isDown
+            || (game.input.pointer1.isDown
+                && pointer1X >= camWidth / 2
+                && pointer1Y >= camHeight / 2)
+            || (game.input.pointer2.isDown
+                && pointer2X >= camWidth / 2
+                && pointer2Y >= camHeight / 2))
+            && canJump2 >= 1) {
+            player2.body.velocity.y = -jumpSpeed;
+            canJump2--;
+            twoGrounded = false;
+        }
         if (player1.body.position.y >= game.world.height || player1.body.position.x <= 0) {
             player1.destroy();
             addPlayer();
@@ -508,19 +523,8 @@ class SimpleGame {
             canJump2++;
             twoGrounded = true;
         }
-        if ((cursors.up.isDown
-            || (game.input.pointer1.isDown
-                && pointer1X >= camWidth / 2
-                && pointer1Y >= camHeight / 2)
-            || (game.input.pointer2.isDown
-                && pointer2X >= camWidth / 2
-                && pointer2Y >= camHeight / 2))
-            && canJump2 >= 1) {
-            player2.body.velocity.y = -jumpSpeed;
-            canJump2--;
-            twoGrounded = false;
-        }
-        if (cursors.left.isDown) {
+        if (cursors.down.isDown) {
+            player2.body.velocity.y = jumpSpeed;
         }
         else if (cursors.right.isDown) {
             startBiatch();

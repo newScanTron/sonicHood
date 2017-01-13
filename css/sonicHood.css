@@ -8,8 +8,13 @@ h1 {
   padding: 2%;
 }
 
-a {
-  text-decoration:none;
+* > a {
+  text-decoration:none !important;
+  color: white;
+}
+
+* > a:hover {
+  color: #aaaaaa;
 }
 .selfie {
   width: 682px / 4;
@@ -24,7 +29,14 @@ a {
   width: 75%;
   color: white;
 }
-
+.content  p {
+    font-size: 20px;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+.content  p > img {
+  max-width: 100%;
+}
 #headerOne {
   color: grey;
   font-size: 40px;
@@ -48,8 +60,10 @@ a {
   opacity: 1;
   color: red; 
 }
-  
-#sonic {
+#sideBarText > a {
+  display: block;
+} 
+.sonic {
   font-size: 20px;
   padding-top: 60px;
 }
@@ -79,6 +93,12 @@ href {
 
 .button {
   color: white; 
+}
+
+@media (max-width: 768px) {
+  #sideBarText > a {
+    display: inline;
+  } 
 }
 
 /*# sourceMappingURL=sonicHood.css.map */

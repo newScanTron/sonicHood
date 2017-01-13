@@ -31,43 +31,40 @@
 	</head>
 <body>
 	<h1 id="headerOne"><span>The Sonic Neighborhood</span> </h1>
-	<div class="container content" id="mainDiv">
-		<div class="row" id="navBar" >
-		    <div id="sideBar" class="col-sm-2">
-		        <h4>Current Projects</h4>
-		        <div id="sideBarText">	
-					<a href="http://www.rotgutwhines.com" id="rotgut" onmouseover="linkHover(this);">RotgutWhines.com</a>
-					<br>
-					<a href="http://www.windbag406.com" id="windbag" onmouseover="linkHover(this);">Windbag406.com</a>
-					<br>
-					<a href="/synthscape/" title="For Fancy Navigation" id="synth" onmouseover="linkHover(this);">Synthscape</a>
-					<br>
-					<a href="/fancychild.html" id="fancyChild" title="For Fancy Navigation" id="fancychild" >FancyChild</a>
-		            <br>
-		            <a href="/about/">About</a>
-		            <br>
-		            <br>
-		        </div>
+	<div class="container content row" id="mainDiv">
+<!--Side bar navigation that will display block when 960px;-->
+		<div id="sideBar" class="col-sm-4">
+		    <h3>Current Projects</h3>
+		    <div id="sideBarText">	
+				<a href="http://www.rotgutwhines.com" id="rotgut" onmouseover="linkHover(this);">RotgutWhines.com</a>
+				<a href="http://www.windbag406.com" id="windbag" onmouseover="linkHover(this);">Windbag406.com</a>
+				<a href="/synthscape/" title="For Fancy Navigation" id="synth" onmouseover="linkHover(this);">Synthscape</a>
+				<a href="/fancychild.html" id="fancyChild" title="For Fancy Navigation" id="fancychild" >FancyChild</a>
 		    </div>
-			<div  class="col-sm-10" >
-				<div id="content">
-					<p id="sonic">
-						The Sonic Neighborhood supports development of a varied array of multi-media projects. Based in Missoula, Montana 
-					</p>
-					<p id="rotgut">
-						Rotgut Whines is a Soul and roll band from missoula, Mt.
-					</p>
-					<p id ="windbag">
-						Windbag Saloon in helena, Mt.
-					</p>
-					<p id="synthscape">
-						SynthScape is a endless runner style game for two players, written in typescript using the <a href='http://phaser.io/'>Phaser.io</a> framwork
-					</p>
-				</div>
+		</div>
+<!--Content of the site changed by above nav bar	-->
+		<div  class="col-sm-8" >
+			<div class="content">
+				<p id="sonicP">
+					The Sonic Neighborhood supports development of a varied array of multi-media projects. Based in Missoula, Montana 
+				</p>
+				<a href="http://www.rotgutwhines.com" ><p id="rotgutP" style="display: none;">
+					Rotgut Whines is a Soul and roll band from missoula, Mt.<br><br>
+					<img src="assets/rotgut.jpg">
+				</p></a>
+				<a href="http://www.windbag406.com" ><p id ="windbagP" style="display: none;">
+					Windbag Saloon in helena, Mt.<br>
+					<img src="assets/windbag.jpg">
+				</p></a>
+				<a href="/synthscape/"><p id="synthscapeP" style="display: none;">
+					SynthScape is a endless runner style game for two players, written in typescript using the <a href='http://phaser.io/'>Phaser.io</a> framwork
+				</p></a>
 			</div>
 		</div>
 	</div>
-
+	<div id="footer">
+		<a href="/about/">About</a>	
+	</div>
 
 
 </body>
