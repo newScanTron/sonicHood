@@ -296,28 +296,28 @@ class SimpleGame {
             addButtons: this.addButtons, });
     }
     preload() {
-        game.load.image('logo', "assets/logo.png");
+        game.load.image('logo', "/assets/logo.png");
         game.stage.backgroundColor = 0x5660e9;
-        game.load.image('sky', 'assets/sky.png');
-        game.load.image('ground', 'assets/platform.png');
-        game.load.image('ground1', 'assets/SynthScapeGround.png');
-        game.load.image('ground2', 'assets/SynthScapeGround1.png');
-        game.load.image('ground3', 'assets/SynthScapeGround3.png');
-        game.load.image('ground4', 'assets/SynthScapeGround4.png');
-        game.load.image('groundRound', 'assets/SynthScapeGroundRound.png');
-        game.load.image('star', 'assets/purpleLazer.png');
-        game.load.image('back', 'assets/swirl1.jpg');
-        game.load.image('loop', 'assets/glass.png');
-        game.load.image('fireBall', 'assets/lazer.png');
-        game.load.image('cloud1', 'assets/cloud1.png');
-        game.load.image('cloud2', 'assets/ground2.png');
-        game.load.image('cloud3', 'assets/cloud3.png');
-        game.load.image('cloud4', 'assets/cloud4.png');
-        game.load.image('star1', 'assets/star1.png');
-        game.load.spritesheet('dude1', 'assets/synthBot1.png', 32, 32);
-        game.load.spritesheet('dude2', 'assets/synthBot2.png', 32, 32);
-        game.load.spritesheet('kaboom', 'assets/explosion.png', 64, 64);
-        game.load.spritesheet('cyclopse', 'assets/cyclopse_talking12fps.png', 64, 64);
+        game.load.image('sky', '/assets/sky.png');
+        game.load.image('ground', '/assets/platform.png');
+        game.load.image('ground1', '/assets/SynthScapeGround.png');
+        game.load.image('ground2', '/assets/SynthScapeGround1.png');
+        game.load.image('ground3', '/assets/SynthScapeGround3.png');
+        game.load.image('ground4', '/assets/SynthScapeGround4.png');
+        game.load.image('groundRound', '/assets/SynthScapeGroundRound.png');
+        game.load.image('star', '/assets/purpleLazer.png');
+        game.load.image('back', '/assets/swirl1.jpg');
+        game.load.image('loop', '/assets/glass.png');
+        game.load.image('fireBall', '/assets/lazer.png');
+        game.load.image('cloud1', '/assets/cloud1.png');
+        game.load.image('cloud2', '/assets/ground2.png');
+        game.load.image('cloud3', '/assets/cloud3.png');
+        game.load.image('cloud4', '/assets/cloud4.png');
+        game.load.image('star1', '/assets/star1.png');
+        game.load.spritesheet('dude1', '/assets/synthBot1.png', 32, 32);
+        game.load.spritesheet('dude2', '/assets/synthBot2.png', 32, 32);
+        game.load.spritesheet('kaboom', '/assets/explosion.png', 64, 64);
+        game.load.spritesheet('cyclopse', '/assets/cyclopse_talking12fps.png', 64, 64);
     }
     render() {
         var numberLive = balls.countLiving();
