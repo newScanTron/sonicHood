@@ -1,0 +1,16 @@
+@using System;
+@using D = System.Data;
+@using c = System.Data.SqlClient;
+@using System.Web.Configuration;
+
+@{
+    Layout = "~/SiteLayout.cshtml";
+    var uFac = new UserBuisnasty();
+    
+    foreach (var money in uFac.EmailList()) {
+        <p> so dope: @money.UserName</p>
+    }
+}
+
+
+	
