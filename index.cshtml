@@ -32,38 +32,72 @@
    <body>
       <h1 id="headerOne"><span>The Sonic Neighborhood</span> </h1>
       <div class="container content row" id="mainDiv">
-   <!--Side bar navigation that will display block when 960px;-->
-      <div id="sideBar" class="col-sm-4">
-          <h3>Current Projects</h3>
-          <div id="sideBarText">
-      <a href="http://www.rotgutwhines.com" id="rotgut" onmouseover="linkHover(this);">RotgutWhines.com</a>
-      <a href="http://www.windbag406.com" id="windbag" onmouseover="linkHover(this);">Windbag406.com</a>
-      <a href="/synthscape/" title="For Fancy Navigation" id="synth" onmouseover="linkHover(this);">Synthscape</a>
-      <a href="/fancychild.html" id="fancyChild" title="For Fancy Navigation" id="fancychild" >FancyChild</a>
-          </div>
-      </div>
-   <!--Content of the site changed by above nav bar	-->
-      <div  class="col-sm-8" >
-      <div class="content">
-      <p id="sonicP">
-      The Sonic Neighborhood supports development of a varied array of multi-media projects. Based in Missoula, Montana
-      </p>
-      <a href="http://www.rotgutwhines.com" ><p id="rotgutP" style="display: none;">
-      Rotgut Whines is a Soul and roll band from missoula, Mt.<br><br>
-      <img src="assets/rotgut.jpg">
-      </p></a>
-      <a href="http://www.windbag406.com" ><p id ="windbagP" style="display: none;">
-      Windbag Saloon in helena, Mt.<br>
-      <img src="assets/windbag.jpg">
-      </p></a>
-      <a href="/synthscape/"><p id="synthscapeP" style="display: none;">
-      SynthScape is a endless runner style game for two players, written in typescript using the <a href='http://phaser.io/'>Phaser.io</a> framwork
-      </p></a>
-      </div>
-      </div>
+         <!--Side bar navigation that will display block when 960px;-->
+            <div id="sideBar" class="col-sm-12">
+                <h3>Current Projects</h3>
+                <div id="sideBarText" >
+                  <div id="rotgut" onmouseover="linkHover(this);" onclick="linkClick(this);">Rotgut Whines</div>
+                  <div id="windbag" onmouseover="linkHover(this);" onclick="linkClick(this);">The Windbag</div>
+                  <div title="For Fancy Navigation" id="synth" onclick="linkClick(this);" onmouseover="linkHover(this);">Synthscape</div>
+                   <div  id="about" onclick="linkClick(this);" onmouseover="linkHover(this);">About Us</div>
+                  <!--<a href="/fancychild.html" id="fancyChild" title="For Fancy Navigation" id="fancychild" >FancyChild</a>-->
+                  
+                </div>
+            </div>
+         <!--Content of the site changed by above nav bar	-->
+            <div  class="col-sm-12" >
+                  <div class="content" id="content">
+                        <div id="displayText" class="ProjectText">      
+                             <p> 
+                                 The Sonic Neighborhood supports 
+                                 development of a varied array of multi-media projects. Based in Missoula, Montana
+                             </p>
+                        </div>
+                        
+                        <div id="rotgutText" style="display: none;" class="ProjectText">      
+                             <p>Rotgut Whines is a Soul and roll band from missoula, Mt.</p>
+                        </div>
+                        
+                        <div id="windbagText" style="display: none;" class="ProjectText">      
+                            <p>Windbag Saloon in helena, Mt.</p>
+                        </div>
+                        
+                        <div id="synthscapeText" style="display: none;" class="ProjectText">      
+                              <p> SynthScape is a endless runner style game for two players, written in typescript using the <a href='http://phaser.io/'>Phaser.io</a> framwork</p>
+                        </div>
+                        
+                        <div id="sonicP" style="display: none;" class="ProjectText">
+                              Need more stuff to talk about how we need more suff on how dope we are at building websites but that is 
+                              not what im good at look how long this gruoup of words is i hesitate to call it a sentence.
+                        </div>
+                        
+                        <a href="http://www.rotgutwhines.com" >
+                        <div id="rotgutP" >
+                            <iframe src="http://www.rotgutwhines.com" style="height: 1000px; width: 100%;"></iframe>
+                        </div>
+                        </a>
+                        
+                        <a href="http://www.windbag406.com" >
+                        <div id ="windbagP" style="display: none;">
+                           <iframe src="http://www.windbag406.com" style="height: 1000px; width: 100%;"></iframe>
+                        </div>
+                        </a>
+                        
+                        <a href="/synthscape/">
+                        <div id="synthscapeP" style="display: none;">
+                              <div id="gamecontent"  >
+                                 <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.4.6/phaser.min.js"></script>
+                                 <script src="/js/Game.js"></script>
+                              </div>
+                              </br></br></br>
+                        </div>
+                        </a>
+                        
+                  </div>
+            </div>
       </div>
       <div id="footer">
-      <a href="/about/">About</a>
+            <a href="/about/">About</a>
       </div>
 
 

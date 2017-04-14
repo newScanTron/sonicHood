@@ -287,7 +287,10 @@ function gofull() {
 }
 class SimpleGame {
     constructor() {
-        game = new Phaser.Game(1000, 600, Phaser.AUTO, 'content', { preload: this.preload,
+        
+        var width = document.getElementById("content").clientWidth;
+        var height = width * (600/1000);
+        game = new Phaser.Game(width, height, Phaser.AUTO, 'gamecontent', { preload: this.preload,
             create: this.create,
             update: this.update,
             render: this.render,

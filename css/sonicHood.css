@@ -1,5 +1,6 @@
 body {
   background-color: lightgray;
+  padding: 0px 20px;
  }
  
 h1 {
@@ -13,7 +14,7 @@ h1 {
   color: white;
 }
 
-* > a:hover {
+ a:hover {
   color: #aaaaaa;
 }
 .selfie {
@@ -26,13 +27,14 @@ h1 {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  width: 75%;
+  width: 90%;
   color: white;
 }
-.content  p {
+.content > div {
     font-size: 20px;
-  padding-top: 60px;
+
   padding-bottom: 60px;
+  text-align: left;
 }
 .content  p > img {
   max-width: 100%;
@@ -53,15 +55,26 @@ h1 {
 #sideBar {
   text-align: left;
   color: grey; 
+
 }
 
 #sideBarText {
   color: grey;
   opacity: 1;
-  color: red; 
+
 }
-#sideBarText > a {
-  display: block;
+#sideBarText > div {
+  display: inline-block;
+  width: 20%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 2%;
+  cursor: pointer;
+} 
+#sideBarText > div:hover {
+  background-color: #555555;
+  color: #cccc44 !important;
+  border-radius: 5px;
 } 
 .sonic {
   font-size: 20px;
@@ -95,9 +108,27 @@ href {
   color: white; 
 }
 
+#footer {
+  text-align: center;
+}
+@media (max-width: 920px) {
+  body {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  #mainDiv {
+    width: 100%;
+  }
+  #content {
+    width: 100%;
+  }
+  #headerOne > span {
+    margin-left:50px;
+  }
+}
 @media (max-width: 768px) {
-  #sideBarText > a {
-    display: inline;
+  #sideBarText > div {
+    display: block;
   } 
 }
 
